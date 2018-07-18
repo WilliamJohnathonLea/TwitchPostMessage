@@ -7,8 +7,8 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 @Singleton
 class AppController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with I18nSupport {
 
-  def home: Action[AnyContent] = Action {
-    Ok
+  def home: Action[AnyContent] = Action { implicit req =>
+    Ok(views.html.index())
   }
 
 }

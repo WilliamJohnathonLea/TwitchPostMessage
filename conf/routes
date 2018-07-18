@@ -1,0 +1,4 @@
+
+GET  /                           controllers.AppController.home
+
+GET  /assets/*file               controllers.Assets.at(path="/public", file)
