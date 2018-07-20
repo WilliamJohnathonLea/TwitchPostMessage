@@ -1,0 +1,11 @@
+@(elements: helper.FieldElements)
+
+<div class="form-group">
+    <label for='@elements.id'>@elements.label</label>
+    @elements.input
+    @elements.errors.map { error =>
+    <div class="invalid-feedback">
+        @error
+    </div>
+    }
+</div>

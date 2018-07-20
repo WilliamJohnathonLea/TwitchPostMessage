@@ -1,4 +1,6 @@
-@(ttsForm: Form[models.TtsForm])(implicit messages: Messages, request: RequestHeader)
+@import views.TtsHelpers._
+
+@(ttsForm: Form[models.TtsForm], voices: Seq[(String, String)])(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
 @main {
 
@@ -6,62 +8,83 @@
 
     <h1>Post a message!</h1>
 
+    @flash.get("success").map { message =>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @message
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    }
+
+    @flash.get("error").map { errorMessage =>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @errorMessage
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    }
+
     <div class="row">
         <div class="col-4">
             @helper.form(action = routes.AppController.postMessage) {
             @helper.CSRF.formField
-            <div class="form-group">
-                <label for="input-text">Text</label>
-                <input id="input-text" name="text" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label for="input-voice">Voice</label>
-                <select name="voice" id="input-voice" class="form-control">
-                    <option value="Ivy">Ivy [English - American]</option>
-                    <option value="Joanna">Joanna [English - American]</option>
-                    <option value="Joey">Joey [English - American]</option>
-                    <option value="Justin">Justin [English - American]</option>
-                    <option value="Kendra">Kendra [English - American]</option>
-                    <option value="Kimberly">Kimberly [English - American]</option>
-                    <option value="Salli">Salli [English - American]</option>
-                    <option value="Nicole">Nicole [English - Australian]</option>
-                    <option value="Russell">Russell [English - Australian]</option>
-                    <option value="Emma">Emma [English - British]</option>
-                    <option value="Brian">Brian [English - British]</option>
-                    <option value="Amy">Amy [English - British]</option>
-                    <option value="Raveena">Raveena [English - Indian]</option>
-                    <option value="Geraint">Geraint [English - Welsh]</option>
-                    <option value="Ricardo">Ricardo [Brazilian Portuguese]</option>
-                    <option value="Vitoria">Vitoria [Brazilian Portuguese]</option>
-                    <option value="Lotte">Lotte [Dutch]</option>
-                    <option value="Ruben">Ruben [Dutch]</option>
-                    <option value="Mathieu">Mathieu [French]</option>
-                    <option value="Celine">Celine [French]</option>
-                    <option value="Chantal">Chantal [Canadian French]</option>
-                    <option value="Marlene">Marlene [German]</option>
-                    <option value="Dora">Dora [Icelandic]</option>
-                    <option value="Karl">Karl [Icelandic]</option>
-                    <option value="Carla">Carla [Italian]</option>
-                    <option value="Giorgio">Giorgio [Italian]</option>
-                    <option value="Mizuki">Mizuki [Japanese]</option>
-                    <option value="Liv">Liv [Norwegian]</option>
-                    <option value="Maja">Maja [Polish]</option>
-                    <option value="Jan">Jan [Polish]</option>
-                    <option value="Ewa">Ewa [Polish]</option>
-                    <option value="Cristiano">Cristiano [Portuquese]</option>
-                    <option value="Ines">Ines [Portuquese]</option>
-                    <option value="Carmen">Carmen [Romanian]</option>
-                    <option value="Maxim">Maxim [Russian]</option>
-                    <option value="Tatyana">Tatyana [Russian]</option>
-                    <option value="Enrique">Enrique [Spanish]</option>
-                    <option value="Penelope">Penelope [US Spanish]</option>
-                    <option value="Enrique">Miguel [US Spanish]</option>
-                    <option value="Conchita">Conchita [Castilian Spanish]</option>
-                    <option value="Astrid">Astrid [Swedish]</option>
-                    <option value="Filiz">Filiz [Turkish]</option>
-                    <option value="Gwyneth">Gwyneth [Welsh]</option>
-                </select>
-            </div>
+            @helper.inputText(ttsForm("text"),
+            'id -> "input-text",
+            'class -> ttsForm("text").error.map(_ => "form-control is-invalid").getOrElse("form-control"))
+            @helper.select(ttsForm("voice"),
+            voices,
+            'id -> "input-voice",
+            'class -> ttsForm("voice").error.map(_ => "form-control is-invalid").getOrElse("form-control"))
+            <!--<div class="form-group">-->
+                <!--<label for="input-voice">Voice</label>-->
+                <!--<select name="voice" id="input-voice" class="form-control">-->
+                    <!--<option value="Ivy">Ivy [English - American]</option>-->
+                    <!--<option value="Joanna">Joanna [English - American]</option>-->
+                    <!--<option value="Joey">Joey [English - American]</option>-->
+                    <!--<option value="Justin">Justin [English - American]</option>-->
+                    <!--<option value="Kendra">Kendra [English - American]</option>-->
+                    <!--<option value="Kimberly">Kimberly [English - American]</option>-->
+                    <!--<option value="Salli">Salli [English - American]</option>-->
+                    <!--<option value="Nicole">Nicole [English - Australian]</option>-->
+                    <!--<option value="Russell">Russell [English - Australian]</option>-->
+                    <!--<option value="Emma">Emma [English - British]</option>-->
+                    <!--<option value="Brian">Brian [English - British]</option>-->
+                    <!--<option value="Amy">Amy [English - British]</option>-->
+                    <!--<option value="Raveena">Raveena [English - Indian]</option>-->
+                    <!--<option value="Geraint">Geraint [English - Welsh]</option>-->
+                    <!--<option value="Ricardo">Ricardo [Brazilian Portuguese]</option>-->
+                    <!--<option value="Vitoria">Vitoria [Brazilian Portuguese]</option>-->
+                    <!--<option value="Lotte">Lotte [Dutch]</option>-->
+                    <!--<option value="Ruben">Ruben [Dutch]</option>-->
+                    <!--<option value="Mathieu">Mathieu [French]</option>-->
+                    <!--<option value="Celine">Celine [French]</option>-->
+                    <!--<option value="Chantal">Chantal [Canadian French]</option>-->
+                    <!--<option value="Marlene">Marlene [German]</option>-->
+                    <!--<option value="Dora">Dora [Icelandic]</option>-->
+                    <!--<option value="Karl">Karl [Icelandic]</option>-->
+                    <!--<option value="Carla">Carla [Italian]</option>-->
+                    <!--<option value="Giorgio">Giorgio [Italian]</option>-->
+                    <!--<option value="Mizuki">Mizuki [Japanese]</option>-->
+                    <!--<option value="Liv">Liv [Norwegian]</option>-->
+                    <!--<option value="Maja">Maja [Polish]</option>-->
+                    <!--<option value="Jan">Jan [Polish]</option>-->
+                    <!--<option value="Ewa">Ewa [Polish]</option>-->
+                    <!--<option value="Cristiano">Cristiano [Portuquese]</option>-->
+                    <!--<option value="Ines">Ines [Portuquese]</option>-->
+                    <!--<option value="Carmen">Carmen [Romanian]</option>-->
+                    <!--<option value="Maxim">Maxim [Russian]</option>-->
+                    <!--<option value="Tatyana">Tatyana [Russian]</option>-->
+                    <!--<option value="Enrique">Enrique [Spanish]</option>-->
+                    <!--<option value="Penelope">Penelope [US Spanish]</option>-->
+                    <!--<option value="Enrique">Miguel [US Spanish]</option>-->
+                    <!--<option value="Conchita">Conchita [Castilian Spanish]</option>-->
+                    <!--<option value="Astrid">Astrid [Swedish]</option>-->
+                    <!--<option value="Filiz">Filiz [Turkish]</option>-->
+                    <!--<option value="Gwyneth">Gwyneth [Welsh]</option>-->
+                <!--</select>-->
+            <!--</div>-->
             <button type="submit" class="btn btn-primary">Submit</button>
             }
         </div>
