@@ -11,3 +11,8 @@ libraryDependencies ++= Seq(
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, DockerPlugin, JavaServerAppPackaging)
+  .settings(
+    dockerBaseImage := "openjdk:8-jre-slim",
+    dockerUpdateLatest := true,
+    dockerExposedPorts := Seq(9000)
+  )
