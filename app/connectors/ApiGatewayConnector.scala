@@ -2,7 +2,7 @@ package connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import models.{ClientError, HttpError, ServerError, TtsForm}
+import models.{ClientSideError, HttpError, ServerSideError, TtsForm}
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 
@@ -16,11 +16,10 @@ class ApiGatewayConnector @Inject()(ws: WSClient, appConfig: AppConfig) {
       .withHttpHeaders("x-api-key" -> appConfig.gatewayKey)
       .post(Json.toJson(data))
       .map { response =>
-        println(response.body)
         if(response.status >= 400 && response.status <= 499) {
-          Left(ClientError)
+          Left(ClientSideError)
         } else if(response.status >= 500 && response.status <= 599) {
-          Left(ServerError)
+          Left(ServerSideError)
         } else {
           Right(():Unit)
         }

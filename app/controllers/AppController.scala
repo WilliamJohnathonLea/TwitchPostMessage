@@ -1,15 +1,18 @@
 package controllers
 
-import connectors.ApiGatewayConnector
+import connectors.{ApiGatewayConnector, SqsConnector}
 import javax.inject.{Inject, Singleton}
-import models.TtsForm
+import models.{ApiResponse, TtsForm}
 import play.api.i18n.I18nSupport
+import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AppController @Inject()(cc: ControllerComponents, gatewayConnector: ApiGatewayConnector)
+class AppController @Inject()(cc: ControllerComponents,
+                              gatewayConnector: ApiGatewayConnector,
+                              sqsConnector: SqsConnector)
                              (implicit ec: ExecutionContext)
   extends AbstractController(cc) with I18nSupport {
 
@@ -36,6 +39,16 @@ class AppController @Inject()(cc: ControllerComponents, gatewayConnector: ApiGat
         }
       }
     )
+  }
+
+  def getAudioFile: Action[AnyContent] = Action.async {
+    sqsConnector.getMessage.flatMap {
+      case Some(message) =>
+        sqsConnector.removeMessage(message.getReceiptHandle).map { _ =>
+          Ok(Json.toJson(ApiResponse(OK, message.getBody)))
+        }
+      case None => Future.successful(NoContent)
+    }
   }
 
 }

@@ -6,7 +6,8 @@ scalaVersion := "2.12.6"
 
 libraryDependencies ++= Seq(
   ws,
-  guice
+  guice,
+  "com.amazonaws" % "aws-java-sdk-sqs" % "1.11.372"
 )
 
 lazy val root = (project in file("."))

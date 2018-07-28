@@ -2,5 +2,5 @@ package models
 
 sealed trait HttpError
 
-object ClientError extends HttpError
-object ServerError extends HttpError
+object ClientSideError extends HttpError
+object ServerSideError extends HttpError

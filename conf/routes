@@ -2,4 +2,6 @@
 GET     /                           controllers.AppController.home
 POST    /                           controllers.AppController.postMessage
 
+GET     /messages                   controllers.AppController.getAudioFile
+
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
