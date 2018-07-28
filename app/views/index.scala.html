@@ -27,7 +27,7 @@
     }
 
     <div class="row">
-        <div class="col-4">
+        <div class="col-lg-4 col-sm-12 col-md-12">
             @helper.form(action = routes.AppController.postMessage) {
             @helper.CSRF.formField
             @helper.inputText(ttsForm("text"),
