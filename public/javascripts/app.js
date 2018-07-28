@@ -7,4 +7,15 @@ $(document).ready(function(){
         submitBtn.html('Processing...');
         form.submit();
     });
+
+    setInterval(function(){
+        $.ajax({
+            type: 'GET',
+            url: '/messages',
+            success: function(data) {
+                console.log('success', data)
+            }
+        });
+    }, 5000);
+
 });
