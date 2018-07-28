@@ -2,6 +2,7 @@
 GET     /                           controllers.AppController.home
 POST    /                           controllers.AppController.postMessage
 
-GET     /messages                   controllers.AppController.getAudioFile
+GET     /messages                   controllers.AppController.getNextAudioFile
+GET     /messages/:name             controllers.AppController.downloadAudioFile(name: String)
 
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

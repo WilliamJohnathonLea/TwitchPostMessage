@@ -41,7 +41,7 @@ class AppController @Inject()(cc: ControllerComponents,
     )
   }
 
-  def getAudioFile: Action[AnyContent] = Action.async {
+  def getNextAudioFile: Action[AnyContent] = Action.async {
     sqsConnector.getMessage.flatMap {
       case Some(message) =>
         sqsConnector.removeMessage(message.getReceiptHandle).map { _ =>
@@ -49,6 +49,10 @@ class AppController @Inject()(cc: ControllerComponents,
         }
       case None => Future.successful(NoContent)
     }
+  }
+
+  def downloadAudioFile(name: String): Action[AnyContent] = Action {
+    Ok
   }
 
 }
