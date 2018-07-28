@@ -1,6 +1,6 @@
 package controllers
 
-import connectors.{ApiGatewayConnector, SqsConnector}
+import connectors.{ApiGatewayConnector, S3Connector, SqsConnector}
 import javax.inject.{Inject, Singleton}
 import models.{ApiResponse, TtsForm}
 import play.api.i18n.I18nSupport
@@ -12,7 +12,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AppController @Inject()(cc: ControllerComponents,
                               gatewayConnector: ApiGatewayConnector,
-                              sqsConnector: SqsConnector)
+                              sqsConnector: SqsConnector,
+                              s3Connector: S3Connector)
                              (implicit ec: ExecutionContext)
   extends AbstractController(cc) with I18nSupport {
 
@@ -52,7 +53,7 @@ class AppController @Inject()(cc: ControllerComponents,
   }
 
   def downloadAudioFile(name: String): Action[AnyContent] = Action {
-    Ok
+    Ok.chunked(s3Connector.downloadFile(name))
   }
 
 }

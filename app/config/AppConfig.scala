@@ -11,4 +11,6 @@ class AppConfig @Inject()(configuration: Configuration) {
 
   lazy val queueUrl: String = configuration.get[String]("sqs.url")
 
+  lazy val s3Bucket: String = configuration.get[String]("s3.bucket")
+
 }
