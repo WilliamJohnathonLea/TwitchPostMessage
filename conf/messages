@@ -1,0 +1,11 @@
+site.title = Post a message!
+
+nav.title = POST
+
+tts.text = Enter text
+tts.voice = Choose a voice
+tts.submit = Submit
+tts.processing = Processing
+
+tts.post.success = Message posted successfully.
+tts.post.error = There was an error, please try again.

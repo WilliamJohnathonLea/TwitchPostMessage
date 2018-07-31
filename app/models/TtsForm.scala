@@ -12,8 +12,8 @@ object TtsForm {
 
   val form = Form(
     mapping(
-      "text" -> nonEmptyText,
-      "voice" -> nonEmptyText
+      "tts.text" -> nonEmptyText,
+      "tts.voice" -> nonEmptyText
     )(TtsForm.apply)(TtsForm.unapply)
   )
 

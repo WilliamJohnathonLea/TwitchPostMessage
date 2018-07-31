@@ -34,9 +34,9 @@ class AppController @Inject()(cc: ControllerComponents,
       ttsForm => {
         gatewayConnector.postTtsData(ttsForm).map {
           case Right(_) => Redirect(routes.AppController.home())
-            .flashing("success" -> "Message posted successfully.")
+            .flashing("success" -> "tts.post.success")
           case Left(_) => Redirect(routes.AppController.home())
-            .flashing("error" -> "There was an error, please try again.")
+            .flashing("error" -> "tts.post.error")
         }
       }
     )
