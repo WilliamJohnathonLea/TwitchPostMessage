@@ -6,6 +6,9 @@ import play.api.Configuration
 @Singleton
 class AppConfig @Inject()(configuration: Configuration) {
 
+  lazy val clientId: String = configuration.get[String]("twitch.client-id")
+  lazy val clientSecret: String = configuration.get[String]("twitch.client-secret")
+
   lazy val gatewayUrl: String = configuration.get[String]("api-gateway.url")
   lazy val gatewayKey: String = configuration.get[String]("api-gateway.key")
 

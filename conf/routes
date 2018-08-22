@@ -2,6 +2,8 @@
 GET     /                           controllers.AppController.home
 POST    /                           controllers.AppController.postMessage
 
+GET     /redirect-uri               controllers.AuthController.redirectUri(code: Option[String])
+
 GET     /messages                   controllers.AppController.getNextAudioFile
 GET     /messages/:name             controllers.AppController.downloadAudioFile(name: String)
 
