@@ -1,5 +1,6 @@
 package controllers
 
+import config.AppConfig
 import connectors.{ApiGatewayConnector, S3Connector, SqsConnector}
 import javax.inject.{Inject, Singleton}
 import models.{ApiResponse, TtsForm}
@@ -14,7 +15,7 @@ class AppController @Inject()(cc: ControllerComponents,
                               gatewayConnector: ApiGatewayConnector,
                               sqsConnector: SqsConnector,
                               s3Connector: S3Connector)
-                             (implicit ec: ExecutionContext)
+                             (implicit appConfig: AppConfig, ec: ExecutionContext)
   extends AbstractController(cc) with I18nSupport {
 
   lazy val voices = Seq(

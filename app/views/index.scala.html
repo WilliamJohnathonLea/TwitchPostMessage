@@ -1,6 +1,7 @@
+@import config.AppConfig
 @import views.TtsHelpers._
 
-@(ttsForm: Form[models.TtsForm], voices: Seq[(String, String)])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@(ttsForm: Form[models.TtsForm], voices: Seq[(String, String)])(implicit appConfig: AppConfig, messages: Messages, flash: Flash, request: RequestHeader)
 
 @main {
 
