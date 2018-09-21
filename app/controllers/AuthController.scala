@@ -1,32 +1,28 @@
 package controllers
 
-import com.auth0.jwt.JWT
-import connectors.TwitchConnector
 import javax.inject.{Inject, Singleton}
-import models.TwitchTokenResponse
+import models.{ClientSideError, ServerSideError}
+import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import services.AuthService
 
-import scala.collection.JavaConverters.iterableAsScalaIterable
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 @Singleton
 class AuthController @Inject()(cc: ControllerComponents,
-                               twitchConnector: TwitchConnector)
+                               authService: AuthService)
                               (implicit ec: ExecutionContext)
   extends AbstractController(cc) {
 
   def redirectUri(code: Option[String]): Action[AnyContent] = Action.async {
     code match {
       case Some(c) =>
-        twitchConnector.requestTokens(c) map { response =>
-          val tokens = response.json.as[TwitchTokenResponse]
-          Try(JWT.decode(tokens.id_token)) foreach { t =>
-            iterableAsScalaIterable(t.getAudience).toSeq foreach println
-          }
-          Ok(response.json)
+        authService.requestTokens(c).value map {
+          case Right(t) => Ok(Json.toJson(t))
+          case Left(ClientSideError) => BadRequest("Client issue")
+          case Left(ServerSideError) => InternalServerError("Server issue")
         }
-      case None => Future.successful(BadRequest("something isn't right!"))
+      case None => Future.successful(BadRequest("No code was received!"))
     }
   }
 
