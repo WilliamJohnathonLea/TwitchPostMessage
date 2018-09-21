@@ -1,48 +1,11 @@
 @import config.AppConfig
-@import views.TtsHelpers._
 
-@(ttsForm: Form[models.TtsForm], voices: Seq[(String, String)])(implicit appConfig: AppConfig, messages: Messages, flash: Flash, request: RequestHeader)
+@()(implicit appConfig: AppConfig, messages: Messages, request: RequestHeader)
 
 @main {
-
 <div class="container-fluid">
 
     <h1>@messages("site.title")</h1>
-
-    @flash.get("success").map { message =>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @messages(message)
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    }
-
-    @flash.get("error").map { errorMessage =>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @messages(errorMessage)
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    }
-
-    <div class="row">
-        <div class="col-lg-4 col-sm-12 col-md-12">
-            @helper.form(action = routes.AppController.postMessage) {
-            @helper.CSRF.formField
-            @helper.textarea(ttsForm("tts.text"),
-            'rows -> "3",
-            'id -> "input-text",
-            'class -> ttsForm("tts.text").error.map(_ => "form-control is-invalid").getOrElse("form-control"))
-            @helper.select(ttsForm("tts.voice"),
-            voices,
-            'id -> "input-voice",
-            'class -> ttsForm("tts.voice").error.map(_ => "form-control is-invalid").getOrElse("form-control"))
-            <button id="btn-submit" type="submit" class="btn btn-primary btn-block">@messages("tts.submit")</button>
-            }
-        </div>
-    </div>
 
 </div>
 }

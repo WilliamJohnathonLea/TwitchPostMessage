@@ -11,11 +11,11 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AppController @Inject()(cc: ControllerComponents,
-                              gatewayConnector: ApiGatewayConnector,
-                              sqsConnector: SqsConnector,
-                              s3Connector: S3Connector)
-                             (implicit appConfig: AppConfig, ec: ExecutionContext)
+class PostMessageController @Inject()(cc: ControllerComponents,
+                                      gatewayConnector: ApiGatewayConnector,
+                                      sqsConnector: SqsConnector,
+                                      s3Connector: S3Connector)
+                                     (implicit appConfig: AppConfig, ec: ExecutionContext)
   extends AbstractController(cc) with I18nSupport {
 
   lazy val voices = Seq(
@@ -25,18 +25,18 @@ class AppController @Inject()(cc: ControllerComponents,
     "Justin" -> "Justin [English - American]"
   )
 
-  def home: Action[AnyContent] = Action { implicit req =>
-    Ok(views.html.index(TtsForm.form, voices))
+  def view: Action[AnyContent] = Action { implicit req =>
+    Ok(views.html.post_message(TtsForm.form, voices))
   }
 
   def postMessage: Action[AnyContent] = Action.async { implicit req =>
     TtsForm.form.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(views.html.index(formWithErrors, voices))),
+      formWithErrors => Future.successful(BadRequest(views.html.post_message(formWithErrors, voices))),
       ttsForm => {
         gatewayConnector.postTtsData(ttsForm).map {
-          case Right(_) => Redirect(routes.AppController.home())
+          case Right(_) => Redirect(routes.PostMessageController.view())
             .flashing("success" -> "tts.post.success")
-          case Left(_) => Redirect(routes.AppController.home())
+          case Left(_) => Redirect(routes.PostMessageController.view())
             .flashing("error" -> "tts.post.error")
         }
       }

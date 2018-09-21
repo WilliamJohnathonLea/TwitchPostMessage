@@ -1,10 +1,12 @@
 
-GET     /                           controllers.AppController.home
-POST    /                           controllers.AppController.postMessage
+GET     /                           controllers.HomeController.view
 
 GET     /redirect-uri               controllers.AuthController.redirectUri(code: Option[String])
 
-GET     /messages                   controllers.AppController.getNextAudioFile
-GET     /messages/:name             controllers.AppController.downloadAudioFile(name: String)
+GET     /post-message               controllers.PostMessageController.view
+POST    /post-message               controllers.PostMessageController.postMessage
+
+GET     /messages                   controllers.PostMessageController.getNextAudioFile
+GET     /messages/:name             controllers.PostMessageController.downloadAudioFile(name: String)
 
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
