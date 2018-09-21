@@ -8,7 +8,8 @@ libraryDependencies ++= Seq(
   ws,
   guice,
   "com.amazonaws" % "aws-java-sdk-sqs" % "1.11.372",
-  "com.lightbend.akka" %% "akka-stream-alpakka-s3" % "0.20"
+  "com.lightbend.akka" %% "akka-stream-alpakka-s3" % "0.20",
+  "com.auth0" % "java-jwt" % "3.4.0"
 )
 
 lazy val dockerRepo = System.getenv("DOCKER_REPO")
