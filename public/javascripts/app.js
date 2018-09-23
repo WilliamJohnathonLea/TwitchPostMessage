@@ -16,16 +16,16 @@ $(document).ready(function(){
         form.submit();
     });
 
-    setInterval(function(){
-        $.ajax({
-            type: 'GET',
-            url: '/messages',
-            success: function(data) {
-                if(typeof(data) !== 'undefined' && data !== null){
-                    downloadSoundFile(data.message)
-                }
-            }
-        });
-    }, 5000);
+//    setInterval(function(){
+//        $.ajax({
+//            type: 'GET',
+//            url: '/messages',
+//            success: function(data) {
+//                if(typeof(data) !== 'undefined' && data !== null){
+//                    downloadSoundFile(data.message)
+//                }
+//            }
+//        });
+//    }, 5000);
 
 });

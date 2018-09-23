@@ -1,0 +1,18 @@
+@import config.AppConfig
+
+@()(implicit appConfig: AppConfig, messages: Messages, request: RequestHeader)
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">POST</a>
+    <ul class="navbar-nav ml-auto">
+        @request.session.get("username").map { username =>
+        <li class="nav-item">
+            <span class="navbar-text">@username</span>
+        </li>
+        }.getOrElse {
+        <li class="nav-item">
+            <a class="btn btn-outline-success" href="https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=@{appConfig.clientId}&redirect_uri=@{appConfig.redirectUri}&scope=openid">Sign in</a>
+        </li>
+        }
+    </ul>
+</nav>

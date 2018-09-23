@@ -1,8 +1,6 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.{ClientSideError, ServerSideError}
-import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.AuthService
 
@@ -14,13 +12,17 @@ class AuthController @Inject()(cc: ControllerComponents,
                               (implicit ec: ExecutionContext)
   extends AbstractController(cc) {
 
-  def redirectUri(code: Option[String]): Action[AnyContent] = Action.async {
+  def redirectUri(code: Option[String]): Action[AnyContent] = Action.async { implicit req =>
     code match {
       case Some(c) =>
-        authService.requestTokens(c).value map {
-          case Right(t) => Ok(Json.toJson(t))
-          case Left(ClientSideError) => BadRequest("Client issue")
-          case Left(ServerSideError) => InternalServerError("Server issue")
+        authService.createAuthSession(c).value map {
+          case Right(t) =>
+            Redirect(routes.HomeController.view())
+              .addingToSession(
+                "access_token" -> t.accessToken,
+                "username" -> t.preferredUsername
+              )
+          case Left(_) => Redirect(routes.HomeController.view())
         }
       case None => Future.successful(BadRequest("No code was received!"))
     }

@@ -9,14 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">POST</a>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-            <a class="btn btn-outline-success" href="https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=@{appConfig.clientId}&redirect_uri=@{appConfig.redirectUri}&scope=openid">Sign in</a>
-        </li>
-    </ul>
-</nav>
+@views.html.navbar()
 
 @content
 
