@@ -2,6 +2,7 @@ package controllers
 
 import config.AppConfig
 import connectors.{ApiGatewayConnector, S3Connector, SqsConnector}
+import controllers.actions.AuthAction
 import javax.inject.{Inject, Singleton}
 import models.{ApiResponse, TtsForm}
 import play.api.i18n.I18nSupport
@@ -14,7 +15,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class PostMessageController @Inject()(cc: ControllerComponents,
                                       gatewayConnector: ApiGatewayConnector,
                                       sqsConnector: SqsConnector,
-                                      s3Connector: S3Connector)
+                                      s3Connector: S3Connector,
+                                      authAction: AuthAction)
                                      (implicit appConfig: AppConfig, ec: ExecutionContext)
   extends AbstractController(cc) with I18nSupport {
 
@@ -25,11 +27,11 @@ class PostMessageController @Inject()(cc: ControllerComponents,
     "Justin" -> "Justin [English - American]"
   )
 
-  def view: Action[AnyContent] = Action { implicit req =>
+  def view: Action[AnyContent] = authAction { implicit req =>
     Ok(views.html.post_message(TtsForm.form, voices))
   }
 
-  def postMessage: Action[AnyContent] = Action.async { implicit req =>
+  def postMessage: Action[AnyContent] = authAction.async { implicit req =>
     TtsForm.form.bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(views.html.post_message(formWithErrors, voices))),
       ttsForm => {
